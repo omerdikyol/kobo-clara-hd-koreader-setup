@@ -43,7 +43,9 @@ PROFILES = {
 def profile_lua(name, actions):
     lines = [f'    ["{name}"] = {{']
     lines += [f'        ["{k}"] = {v},' for k, v in actions]
-    lines += ['        ["settings"] = {', f'            ["name"] = "{name}",', '            ["order"] = {']
+    # registered = "Show in action list"; without it the profile can't appear in gestures/QuickMenus
+    lines += ['        ["settings"] = {', f'            ["name"] = "{name}",', '            ["registered"] = true,',
+              '            ["order"] = {']
     lines += [f'                [{i}] = "{k}",' for i, (k, _) in enumerate(actions, 1)]
     lines += ['            },', '        },', '    },']
     return "\n".join(lines) + "\n"
