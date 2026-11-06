@@ -136,7 +136,7 @@ The settings live in the reader's top menu: gear tab → Status bar. They only s
 
 ### PDF profiles
 
-[`scripts/add_pdf_profiles.py`](scripts/add_pdf_profiles.py) adds three profiles to `settings/profiles.lua` and appends them to the reader's bottom-right QuickMenu (run `add_quickmenu.py` first). Open a PDF, tap the bottom-right corner, and pick one:
+[`scripts/add_pdf_profiles.py`](scripts/add_pdf_profiles.py) adds three profiles to `settings/profiles.lua` and appends them to the reader's bottom-right QuickMenu (run `add_quickmenu.py` first). Open a PDF, long-press the bottom-right corner, and pick one:
 
 | Profile | View mode | Page crop | Zoom to | Margin | Use for |
 |---|---|---|---|---|---|
@@ -156,9 +156,9 @@ The values are the dispatcher arguments from `frontend/ui/data/koptoptions.lua`.
 
 KOReader opens `.md` as plain text, with no formatting. Convert to EPUB first: in Calibre, Convert books → EPUB with the TXT input formatting set to *markdown*, or run `pandoc notes.md -o notes.epub`.
 
-### QuickMenu on the bottom-right corner
+### QuickMenu on a long-press of the bottom-right corner
 
-[`scripts/add_quickmenu.py`](scripts/add_quickmenu.py) adds a QuickMenu to `settings/gestures.lua`, opened by tapping the bottom-right corner, in both the library and the reader. It holds Calibre connect, LocalSend (start/stop server, send file or current book), OPDS, Cloud storage, App Store, Wi-Fi, History and the stats calendar. It saves a `.bak` copy of the original file and refuses to run if that corner already has an action.
+[`scripts/add_quickmenu.py`](scripts/add_quickmenu.py) adds a QuickMenu to `settings/gestures.lua`, opened by long-pressing the bottom-right corner, in both the library and the reader. It's a long-press rather than a tap because a right-handed reader taps that corner to turn pages. The long-press is unused by default in both the reader and the library, and in that corner it takes priority over text selection and the status bar's own long-press. It holds Calibre connect, LocalSend (start/stop server, send file or current book), OPDS, Cloud storage, App Store, Wi-Fi, History and the stats calendar. It saves a `.bak` copy of the original file and refuses to run if that corner already has an action.
 
 ```sh
 python3 scripts/add_quickmenu.py /Volumes/KOBOeReader/.adds/koreader/settings/gestures.lua

@@ -1,4 +1,4 @@
-"""Add a QuickMenu on bottom-right corner tap to KOReader gestures.lua (file manager + reader)."""
+"""Add a QuickMenu on bottom-right corner long-press to KOReader gestures.lua (file manager + reader)."""
 import shutil
 import sys
 
@@ -6,7 +6,7 @@ path = sys.argv[1]
 src = open(path).read()
 shutil.copy(path, path + ".bak")
 
-GESTURE = "tap_right_bottom_corner"
+GESTURE = "hold_bottom_right_corner"
 FM = ["calibre_start_connection", "toggle_localsend_server", "send_file_localsend",
       "opds_show_catalog", "cloudstorage", "AppStore_open", "toggle_wifi",
       "history", "stats_calendar_view"]

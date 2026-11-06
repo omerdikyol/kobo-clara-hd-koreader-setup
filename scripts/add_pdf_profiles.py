@@ -66,7 +66,7 @@ open(path, "w").write(src)
 gpath = os.path.join(settings_dir, "gestures.lua")
 g = open(gpath).read()
 start = g.find('    ["gesture_reader"] = {\n')
-qm = g.find('        ["tap_right_bottom_corner"] = {\n', start)
+qm = g.find('        ["hold_bottom_right_corner"] = {\n', start)
 if start >= 0 and qm >= 0:
     shutil.copy(gpath, gpath + ".bak")
     order_at = g.index('                ["order"] = {\n', qm)
@@ -81,7 +81,7 @@ if start >= 0 and qm >= 0:
         adds_bool += f'            ["{key}"] = true,\n'
         adds_order += f'                    [{n}] = "{key}",\n'
     g = g[:order_end] + adds_order + g[order_end:]
-    ins = qm + len('        ["tap_right_bottom_corner"] = {\n')
+    ins = qm + len('        ["hold_bottom_right_corner"] = {\n')
     g = g[:ins] + adds_bool + g[ins:]
     open(gpath, "w").write(g)
 print("ok")
