@@ -100,7 +100,61 @@ Edited in `.adds/koreader/settings.reader.lua` while KOReader was in USB mode:
 
 Keep `Books` at the root of the storage. If it ends up somewhere inside `.adds/koreader/`, it's hidden from Nickel and easy to lose.
 
-Literata (static TTFs from [googlefonts/literata](https://github.com/googlefonts/literata/tree/main/fonts/ttf)) goes in `/fonts`, so both KOReader and Nickel can use it.
+### Fonts
+
+Fonts go in `/fonts` (storage root), so both KOReader and Nickel can use them. Use static TTFs: KOReader handles them more reliably than variable fonts.
+
+| Font | Role | Source |
+|---|---|---|
+| **Charis** | Default font (`cre_font`) | [silnrsi/font-charis](https://github.com/silnrsi/font-charis/releases) |
+| **Source Serif 4** | Fallback font (`fallback_font`), used only for glyphs Charis lacks | [adobe-fonts/source-serif](https://github.com/adobe-fonts/source-serif/releases), `TTF/` folder |
+| Literata | Alternative | [googlefonts/literata](https://github.com/googlefonts/literata/tree/main/fonts/ttf) |
+| Bitter | Alternative | [google/fonts](https://github.com/google/fonts/tree/main/ofl/bitter). Only a variable font upstream, so I made static instances with `fonttools varLib.instancer "Bitter[wght].ttf" wght=400 --update-name-table` (and 500, 700, plus the italic file). |
+| Atkinson Hyperlegible Next | Alternative (sans) | [googlefonts/atkinson-hyperlegible-next](https://github.com/googlefonts/atkinson-hyperlegible-next/tree/main/fonts/ttf) |
+
+All of these are OFL-licensed and cover Turkish (ğ ş ı İ). To compare fonts, read the same page at the same size with each one. If a font looks thin, raise the font weight one step before deciding against it.
+
+```lua
+["cre_font"] = "Charis",
+["fallback_font"] = "Source Serif 4",
+```
+
+### Status bar
+
+The status bar shows a single custom line; every other footer item is turned off:
+
+```lua
+["reader_footer_custom_text"] = "\u{F02D} %c/%t · Book %p% · Ch %P% · %l left",
+-- in ["footer"]: ["custom_text"] = true, every other item = false
+```
+
+This renders as `📖 45/312 · Book 14% · Ch 62% · 7 left`. `\u{F02D}` is the Font Awesome book glyph, which KOReader's bundled symbol font provides. You can't type it on the device keyboard, so write it into the settings file over USB.
+
+Placeholders: `%T` title, `%A` author, `%S` series, `%C` chapter title, `%c`/`%t` current/total page, `%p` book %, `%P` chapter %, `%l` pages left in chapter, `%h`/`%H` time left in chapter/book (needs Statistics).
+
+The settings live in the reader's top menu: gear tab → Status bar. They only show while a book is open.
+
+### PDF profiles
+
+[`scripts/add_pdf_profiles.py`](scripts/add_pdf_profiles.py) adds three profiles to `settings/profiles.lua` and appends them to the reader's bottom-right QuickMenu (run `add_quickmenu.py` first). Open a PDF, tap the bottom-right corner, and pick one:
+
+| Profile | View mode | Page crop | Zoom to | Margin | Use for |
+|---|---|---|---|---|---|
+| PDF Book | page | auto | content width | 0.10 | single-column text PDFs |
+| PDF Paper | page | auto | 2 columns | 0.05 | two-column academic papers |
+| PDF Slides | page | none | full page | 0.05 | slides, diagrams, sheet music |
+
+All three turn reflow off. For crooked scans, turn on Reflow plus Auto straighten per book instead.
+
+```sh
+python3 scripts/add_pdf_profiles.py /Volumes/KOBOeReader/.adds/koreader/settings
+```
+
+The values are the dispatcher arguments from `frontend/ui/data/koptoptions.lua`. Keep them as strings and booleans (for example `"auto"`, `false`): a numeric value like `0` for view mode is truthy in Lua and switches to continuous mode.
+
+### Markdown
+
+KOReader opens `.md` as plain text, with no formatting. Convert to EPUB first: in Calibre, Convert books → EPUB with the TXT input formatting set to *markdown*, or run `pandoc notes.md -o notes.epub`.
 
 ### QuickMenu on the bottom-right corner
 
@@ -116,7 +170,7 @@ The default gestures already handle brightness and warmth: swipe on the left edg
 
 These are easier in the UI than by editing files:
 
-- Font set to Literata. Long-press a setting to make it the default for all books; otherwise it applies to the current book only.
+- Long-press a setting to make it the default for all books; otherwise it applies to the current book only.
 - Style tweaks: ignore publisher margins and font families.
 - Gamma and font weight raised slightly. Highlight style set to underline, which flashes less.
 - A "Night" profile (night mode, warm light, larger font) bound to a gesture.
