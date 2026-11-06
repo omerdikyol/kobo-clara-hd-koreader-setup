@@ -1,0 +1,7 @@
+{
+  "$schema": "https://github.com/hanatsumi/rakuyomi/releases/download/main/settings.schema.json",
+  "source_lists": [
+    "https://raw.githubusercontent.com/Skittyblock/aidoku-community-sources/refs/heads/gh-pages/index.min.json"
+  ],
+  "languages": ["en", "tr"]
+}

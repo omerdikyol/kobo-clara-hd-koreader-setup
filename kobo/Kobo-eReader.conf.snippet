@@ -1,0 +1,4 @@
+# Append to .kobo/Kobo/Kobo eReader.conf (needed on firmware 4.17+)
+# Stops Nickel from indexing hidden folders like .adds/koreader, except .kobo and .adobe*
+[FeatureSettings]
+ExcludeSyncFolders=(\\.(?!kobo|adobe).+|([^.][^/]*/)+\\..+)
