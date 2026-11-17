@@ -125,10 +125,16 @@ The status bar shows a single custom line; every other footer item is turned off
 
 ```lua
 ["reader_footer_custom_text"] = "\u{F02D} %c/%t · Book %p% · Ch %P% · %l left",
--- in ["footer"]: ["custom_text"] = true, every other item = false
+-- in ["footer"]:
+["custom_text"] = true, ["additional_content"] = true, ["time"] = true, ["battery"] = true,
+["auto_refresh_time"] = true,   -- clock and session time refresh every minute
+["order"] = { [1] = "custom_text", [2] = "additional_content", [3] = "time", [4] = "battery" },
+-- every other item = false
 ```
 
-This renders as `📖 45/312 · Book 14% · Ch 62% · 7 left`. `\u{F02D}` is the Font Awesome book glyph, which KOReader's bundled symbol font provides. You can't type it on the device keyboard, so write it into the settings file over USB.
+This renders as `📖 45/312 · Book 14% · Ch 62% · 7 left | Session 0:23 | ⌚ 14:05 | 🔋 85%`.
+
+`Session h:mm` comes from the user patch [`patches/2-footer-session-time.lua`](patches/2-footer-session-time.lua) (copy it to `.adds/koreader/patches/`). It shows the time since the book was opened or the device last woke up, which is when the Statistics plugin starts a new session. Pauses with the screen on are included. KOReader has no built-in status bar item for this. `\u{F02D}` is the Font Awesome book glyph, which KOReader's bundled symbol font provides. You can't type it on the device keyboard, so write it into the settings file over USB.
 
 Placeholders: `%T` title, `%A` author, `%S` series, `%C` chapter title, `%c`/`%t` current/total page, `%p` book %, `%P` chapter %, `%l` pages left in chapter, `%h`/`%H` time left in chapter/book (needs Statistics).
 
